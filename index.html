@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html>
+<head>
+<script src="https://code.jquery.com/jquery-2.2.0.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" 
+  <meta content="text/html;charset=utf-8" http-equiv="Content-Type">
+<meta content="utf-8" http-equiv="encoding">
+</head>
+<body>
+<div>
+<h1>
+APP DEMO
+</h1>
+  <input type="text" id="searchTerm">
+  <button id="getProduct">Product List </button>
+  
+</div>
+<table id="prodInfo" class="table">
+  <thead class="thead-inverse">
+    <tr>
+      <th>Image</th>
+      <th>Type</th>
+      <th>Price</th>
+      <th>Name</th>
+  </thead>
+  <tbody>
+  </tbody>
+  
+</table>
+<script>
+function makeAjaxCall(url, cb){
+  var xhr = new XMLHttpRequest();
+  xhr.open("GET", url, true);
+  xhr.send();
+  xhr.onreadystatechange = function(){
+    if (xhr.readyState === 4 && xhr.status === 200){
+      // console.log(xhr.response);
+      var responseJson = JSON.parse(xhr.response);
+      cb(responseJson);
+      // console.log(responseJson);
+      
+    }
+  }
+}
+var btnElem = document.getElementById("getProduct");
+var usernameElem = document.getElementById("username");
+var tableElem = document.getElementById("prodInfo");
+
+btnElem.addEventListener("click", function(){
+  
+var url = "https://itunes.apple.com/us/rss/toppaidapplications/limit=100/json";
+makeAjaxCall(url, renderUserData);
+});
+
+function renderUserData(data){
+  
+  var entries = data.feed.entry;
+  console.log(entries);
+  var tbodyElem = tableElem.querySelector("tbody");
+  
+  for ( var i=0;i<entries.length;i++){
+
+    var images = entries[i]['im:image'][0]['label'];
+    console.log(images);
+  var trElem= document.createElement("tr");
+  var gameElem = document.createElement("td");
+  var imageElem = document.createElement("img");
+  var priceElem = document.createElement("td");
+  var prodElem= document.createElement("td");
+  var nameElem = document.createElement("td");
+  nameElem.innerHTML = entries[i]['im:name']['label'];
+  imageElem.src = images;
+  gameElem.innerHTML = "Games";
+  priceElem.innerHTML= entries[i]['im:price']['label'];
+  prodElem.appendChild(imageElem);
+  trElem.appendChild(prodElem);
+  trElem.appendChild(gameElem);
+  trElem.appendChild(priceElem);
+  trElem.appendChild(nameElem);
+  tbodyElem.appendChild(trElem);
+}
+
+ console.log("inside");
+ }
+ 
+ 
+
+
+$(document).ready(function()
+{
+  $('#searchTerm').keyup(function()
+  {
+    searchTable($(this).val());
+  });
+});
+ 
+function searchTable(inputVal)
+{
+  var table = $('#prodInfo');
+  table.find('tr').each(function(index, row)
+  {
+    var allCells = $(row).find('td');
+    if(allCells.length)
+    {
+      var found = false;
+      allCells.each(function(index, td)
+      {
+        var regExp = new RegExp(inputVal, 'i');
+        if(regExp.test($(td).text()))
+        {
+          found = true;
+          return false;
+        }
+      });
+      if(found == true)$(row).show();else $(row).hide();
+    }
+  });
+}
+   
+
+
+</script>
+</body>
+</html>
+
