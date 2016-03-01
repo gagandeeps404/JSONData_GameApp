@@ -3,6 +3,7 @@
 <head>
 <script src="https://code.jquery.com/jquery-2.2.0.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+<script src="app.js"></script>
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" 
   <meta content="text/html;charset=utf-8" http-equiv="Content-Type">
 <meta content="utf-8" http-equiv="encoding">
@@ -87,36 +88,7 @@ function renderUserData(data){
  
 
 
-$(document).ready(function()
-{
-  $('#searchTerm').keyup(function()
-  {
-    searchTable($(this).val());
-  });
-});
- 
-function searchTable(inputVal)
-{
-  var table = $('#prodInfo');
-  table.find('tr').each(function(index, row)
-  {
-    var allCells = $(row).find('td');
-    if(allCells.length)
-    {
-      var found = false;
-      allCells.each(function(index, td)
-      {
-        var regExp = new RegExp(inputVal, 'i');
-        if(regExp.test($(td).text()))
-        {
-          found = true;
-          return false;
-        }
-      });
-      if(found == true)$(row).show();else $(row).hide();
-    }
-  });
-}
+
    
 
 
